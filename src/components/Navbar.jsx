@@ -1,18 +1,38 @@
-import React from 'react'
-import'./Navbar.css'
+import React, { useEffect, useState } from 'react';
+import './Navbar.css';
 
 const Navbar = () => {
-  return (
-    <div className='nav'>
-      <div className="nav-logo">Ev-olution</div>
-      <ul className="nav-menu">
-        <li>Home</li>
-        <li>Explore</li>
-        <li>About</li>
-        <li className='nav-contact'>Contact</li>
-      </ul>
-    </div>
-  )
-}
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
-export default Navbar
+  // Scroll detection
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    <nav className={`nav ${scrolled ? 'scrolled' : ''}`}>
+      <div className="nav-logo">Ev-olution</div>
+
+      <ul className={`nav-menu ${menuOpen ? 'open' : ''}`}>
+        <li><span className="nav-link">Home</span></li>
+        <li><span className="nav-link">Explore</span></li>
+        <li><span className="nav-link">About</span></li>
+        <li><span className="nav-contact">Contact</span></li>
+      </ul>
+
+      <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
+        <span className='bar'></span>
+        <span className='bar'></span>
+        <span className='bar'></span>
+      </div>
+    </nav>
+  );
+};
+
+export default Navbar;
